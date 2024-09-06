@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL WEB DE NOTICIAS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>PORTAL WEB DE NOTICIAS</h1>
+    </header>
+    <style>
+        /* Contenedor del menú */
+        .nav-container {
+            display: flex;
+            justify-content: center; /* Centra horizontalmente el contenido */
+            padding: 10px; /* Espaciado interno del contenedor */
+        }
+
+        /* Lista de elementos del menú */
+        .nav-list {
+            display: flex; /* Alinea los elementos en fila */
+            list-style: none; /* Elimina los puntos de lista predeterminados */
+            padding: 0; /* Elimina el padding predeterminado */
+            margin: 0; /* Elimina el margen predeterminado */
+        }
+
+        /* Elementos de la lista */
+        .nav-item {
+            margin: 0 10px; /* Espaciado horizontal entre elementos */
+        }
+
+        /* Estilo de los enlaces del menú */
+        .nav-link {
+            text-decoration: none; /* Elimina el subrayado de los enlaces */
+            color: white; /* Color del texto */
+            padding: 3px 10px; /* Espaciado interno de los enlaces */
+            border-radius: 10px; /* Bordes redondeados */
+            background-color: #007bff; /* Color de fondo */
+            transition: background-color 0.3s, color 0.3s; /* Efecto de transición */
+        }
+
+        /* Estilo de los enlaces al pasar el ratón sobre ellos */
+        .nav-link:hover {
+            background-color: #0056b3; /* Cambia el color de fondo al pasar el ratón */
+            color: white; /* Color del texto */
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-container">
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="/" class="nav-link">Noticias</a>
+            </li>
+            <li class="nav-item">
+                <a href="/deportes" class="nav-link">Deportes</a>
+            </li>
+            <li class="nav-item">
+                <a href="/politica" class="nav-link">Política</a>
+            </li>
+        </ul>
+    </nav>
+</body>
+
+    <div class="container">
+       
+
+        {% if diario %}
+        <h2>Noticias de {{ diario }}</h2>
+        {% endif %}
+
+        <div class="articles">
+            {% for articulo in articulos %}
+            <div class="article-container">
+                {% if articulo.imagen != 'No disponible' %}
+                <div class="article-image">
+                    <img src="{{ articulo.imagen }}" alt="Imagen del artículo">
+                </div>
+                {% endif %}
+                <div class="article-content">
+                    <h3 class="article-source">Diario: {{ articulo.diario }}</h3> <!-- Mostrar el nombre del diario -->
+                    <h2 class="article-title">{{ articulo.titulo }}</h2>
+                    <p class="article-meta">Fecha: {{ articulo.fecha }} | Autor: {{ articulo.autor }}</p>
+                    <p class="article-excerpt">{{ articulo.contenido }}</p>
+                    <a href="{{ articulo.url_articulo }}" target="_blank" class="article-readmore">Leer más</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="{{ url_for('index', page=page-1) }}" class="prev">&laquo; Página Anterior</a>
+            {% endif %}
+            
+            <span>Página {{ page }} de {{ total_pages }}</span>
+
+            {% if page < total_pages %}
+            <a href="{{ url_for('index', page=page+1) }}" class="next">Página Siguiente &raquo;</a>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; Portal de Noticias</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
